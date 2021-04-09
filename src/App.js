@@ -1,24 +1,35 @@
-import logo from './logo.svg';
+import { Fragment } from "react";
 import './App.css';
-
+import Form from "./components/form/Form";
+import { Container, Typography } from "@material-ui/core";
+import "fontsource-roboto";
 function App() {
+
+  function handleSendForm(data) {
+    console.log(data)
+  }
+
+  function validateCPF(cpf) {
+    if(cpf.length !== 11) {
+      const objValidate = {
+        valido: false,
+        texto: "CPF deve ter 11 dígitos"
+      };
+      return objValidate;
+    }else {
+      const objValidate = {
+        valido: true,
+        texto: ""
+      };
+      return objValidate; 
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container component="article" maxWidth="sm">
+      <Typography align="center" variant="h3" component="h1">Formulário de cadastro</Typography>
+      <Form sendForm={handleSendForm} handleCpfValidate={validateCPF} />
+    </Container>
   );
 }
 
