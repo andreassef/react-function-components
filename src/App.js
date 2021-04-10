@@ -3,6 +3,8 @@ import './App.css';
 import Form from "./components/form/Form";
 import { Container, Typography } from "@material-ui/core";
 import "fontsource-roboto";
+import MainForm from "./components/form/MainForm";
+
 function App() {
 
   function handleSendForm(data) {
@@ -28,7 +30,7 @@ function App() {
   return (
     <Container component="article" maxWidth="sm">
       <Typography align="center" variant="h3" component="h1">Formulário de cadastro</Typography>
-      <Form sendForm={handleSendForm} handleCpfValidate={validateCPF} />
+      <MainForm sendForm={handleSendForm} handleCpfValidate={validateCPF} />
     </Container>
   );
 }
