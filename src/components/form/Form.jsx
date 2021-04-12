@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, TextField, Switch, FormControlLabel } from "@material-ui/core";
+import ValidatorsRegister from "../../contexts/ValidatorsRegister";
 
-function Form({handleCpfValidate}) {
+function Form({sendForm}) {
     const [nome, setNome] = useState("");
     const [sobrenome, setSobrenome] = useState("");
     const [cpf, setCpf] = useState("");
@@ -9,17 +10,39 @@ function Form({handleCpfValidate}) {
     const [novidades, setNovidades] = useState(true);
     const [erros, setErros] = useState({cpf:{valido:true, texto:""}});
 
+    const validators = useContext(ValidatorsRegister);
+
+    function inputValidate(event) {
+        const {name, value} = event.target;
+        const isValid = validators[name](value);
+        const newState = {...erros};
+        newState[name] = isValid;
+        setErros(newState);
+    }
+
+    function isValidToSend() {
+        for(let keys in erros) {
+            if (!erros[keys].valido) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     return(
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                console.log(nome, sobrenome, novidades);
+                if(isValidToSend()) {
+                    sendForm({nome, sobrenome, cpf, promocoes, novidades});
+                }
             }}
         >
             <TextField 
                 onChange={(event) => {
                     setNome(event.target.value)
-                }} 
+                }}
+                name="nome" 
                 id="nome" 
                 label="Nome" 
                 variant="outlined" 
@@ -30,7 +53,8 @@ function Form({handleCpfValidate}) {
             <TextField 
                 onChange={(event) => {
                     setSobrenome(event.target.value)
-                }} 
+                }}
+                name="sobrenome" 
                 id="sobrenome" 
                 label="Sobrenome" 
                 variant="outlined" 
@@ -43,10 +67,8 @@ function Form({handleCpfValidate}) {
                 onChange={(event) => {
                     setCpf(event.target.value);
                 }}
-                onBlur={(event) => {
-                    const isValid = handleCpfValidate(cpf);
-                    setErros({cpf: isValid});
-                }}
+                onBlur={inputValidate}
+                name="cpf"
                 error={!erros.cpf.valido}
                 helperText={erros.cpf.texto}
                 id="cpf" 
@@ -77,7 +99,7 @@ function Form({handleCpfValidate}) {
                 color="primary" />} 
             />
 
-            <Button variant="contained" color="primary" type="submit">Cadastrar</Button>
+            <Button variant="contained" color="primary" type="submit">Próximo</Button>
         </form>
     )
 }
