@@ -1,21 +1,17 @@
 import { Button, TextField } from "@material-ui/core";
 import React, { useState, useContext } from "react";
 import ValidatorsRegister from "../../contexts/ValidatorsRegister";
+import useErros from "../../hooks/useErros";
 
 function Login({sendForm}) {
+    const validators = useContext(ValidatorsRegister);
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [erros, setErros] = useState({senha:{valido:true, texto:""}});
+    const [erros, inputValidate] = useErros(validators);
 
-    const validators = useContext(ValidatorsRegister);
+   
 
-    function inputValidate(event) {
-        const {name, value} = event.target;
-        const isValid = validators[name](value);
-        const newState = {...erros};
-        newState[name] = isValid;
-        setErros(newState);
-    }
+
 
     return(
         <form onSubmit={(event) => {

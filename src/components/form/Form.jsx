@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Button, TextField, Switch, FormControlLabel } from "@material-ui/core";
 import ValidatorsRegister from "../../contexts/ValidatorsRegister";
+import useErros from '../../hooks/useErros';
 
 function Form({sendForm}) {
     const [nome, setNome] = useState("");
@@ -8,17 +9,8 @@ function Form({sendForm}) {
     const [cpf, setCpf] = useState("");
     const [promocoes, setPromocoes] = useState(true);
     const [novidades, setNovidades] = useState(true);
-    const [erros, setErros] = useState({cpf:{valido:true, texto:""}});
-
     const validators = useContext(ValidatorsRegister);
-
-    function inputValidate(event) {
-        const {name, value} = event.target;
-        const isValid = validators[name](value);
-        const newState = {...erros};
-        newState[name] = isValid;
-        setErros(newState);
-    }
+    const [erros, inputValidate] = useErros(validators);
 
     function isValidToSend() {
         for(let keys in erros) {
