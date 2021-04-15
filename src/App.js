@@ -17,7 +17,7 @@ function App() {
     <Container component="article" maxWidth="sm">
       <Typography align="center" variant="h3" component="h1">Formulário de cadastro</Typography>
       <ValidatorsRegister.Provider value={{cpf: validateCPF, senha: validatePassword}}>
-        <MainForm sendForm={handleSendForm} />
+          <MainForm sendForm={handleSendForm} />
       </ValidatorsRegister.Provider>
     </Container>
   );
